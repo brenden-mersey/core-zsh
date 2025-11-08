@@ -3,7 +3,7 @@
 # used across all custom modules.
 
 # --- External Drive Path (global reference) ---
-CLIENTS_DIR="/Documents/Clients"
+CLIENTS_DIR="/Volumes/Mersey 5TB/Clients"
 
 # --- Path Configuration ---
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"

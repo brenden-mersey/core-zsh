@@ -7,9 +7,6 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
   # Disable theme lookup (we'll source Powerlevel10k manually)
   ZSH_THEME=""
 
-  # Plugins (safe defaults)
-  plugins=(git)
-
   # Load Oh My Zsh
   source $ZSH/oh-my-zsh.sh
 
