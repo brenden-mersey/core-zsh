@@ -3,6 +3,7 @@
 # used across all custom modules.
 
 # --- External Drive Path (global reference) ---
+# CLIENTS_DIR="/Users/brendenmersey/Documents/Clients" (Laptop-specific)
 CLIENTS_DIR="/Volumes/Mersey 5TB/Clients"
 
 # --- Path Configuration ---
