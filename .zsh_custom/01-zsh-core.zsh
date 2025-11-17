@@ -42,5 +42,5 @@ alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
 PROMPT='%F{green}%n@%m%f %F{blue}%1~%f %# '
 
 # --- Startup message (optional) ---
-echo "🪴  Zsh core loaded — Starting up the CLI to:"
+echo "🪴  Zsh core loaded — Booting CLI to..."
 echo "    $CLIENTS_DIR"
