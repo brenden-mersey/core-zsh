@@ -49,3 +49,33 @@ git-latest() {
       --format='%(color:yellow)%(refname:short)%(color:reset) - %(color:green)%(committerdate:relative)%(color:reset)'
   fi
 }
+
+# -- Compare directories using difftool
+dirdelta() {
+  if [ $# -ne 2 ]; then
+    echo "Usage: dirdelta <directory_A> <directory_B>"
+    return 1
+  fi
+
+  local dirA="$1"
+  local dirB="$2"
+
+  # Validate directories
+  if [ ! -d "$dirA" ]; then
+    echo "Error: '$dirA' is not a directory."
+    return 1
+  fi
+
+  if [ ! -d "$dirB" ]; then
+    echo "Error: '$dirB' is not a directory."
+    return 1
+  fi
+
+  echo "🌓 Running dirdelta comparison..."
+  echo "A (source): $dirA"
+  echo "B (target): $dirB"
+  echo ""
+
+  git difftool --no-index "$dirA" "$dirB"
+}
+
