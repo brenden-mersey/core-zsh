@@ -1,15 +1,21 @@
-# --- Zsh Plugins Module ---
-# Provides smart completions, syntax highlighting, suggestions, and quality-of-life utilities.
+# --- Zsh Plugins Module (Oh My Zsh) ---
 
-# --- Auto-install helper ---
+[[ -o interactive ]] || return
+command -v git >/dev/null 2>&1 || return
+
 ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
 install_plugin() {
-  local repo=$1
-  local folder=$2
-  if [ ! -d "$ZSH_CUSTOM_DIR/plugins/$folder" ]; then
+  local repo="$1"
+  local folder="$2"
+  local dest="$ZSH_CUSTOM_DIR/plugins/$folder"
+
+  if [[ ! -d "$dest" ]]; then
     echo "🔧  Installing $folder..."
-    git clone --depth=1 "$repo" "$ZSH_CUSTOM_DIR/plugins/$folder" >/dev/null 2>&1
+    git clone --depth=1 "$repo" "$dest" >/dev/null 2>&1 || {
+      echo "⚠️  Failed to install $folder"
+      return 1
+    }
   fi
 }
 
@@ -21,13 +27,10 @@ install_plugin "https://github.com/zsh-users/zsh-completions" "zsh-completions"
 # --- Enable plugins (Oh My Zsh will load them) ---
 plugins=(
   git
-  z                     # jump between frequently-used directories
-  extract               # extract archives of any type
-  colored-man-pages     # colorized man-page output
+  z
+  extract
+  colored-man-pages
   zsh-autosuggestions
-  zsh-syntax-highlighting
   zsh-completions
+  zsh-syntax-highlighting
 )
-
-# --- Initialize completions if not already loaded ---
-autoload -Uz compinit && compinit -C

@@ -1,46 +1,73 @@
 # --- Zsh Core Configuration ---
-# This file initializes global settings and environment variables
-# used across all custom modules.
 
-# --- External Drive Path (global reference) ---
-# CLIENTS_DIR="/Users/brendenmersey/Documents/Clients" (Laptop-specific)
-CLIENTS_DIR="/Volumes/Mersey 5TB/Clients"
+# Prefer UTF-8
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
 
-# --- Path Configuration ---
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-export PATH="/usr/local/opt/openjdk/bin:$PATH"
+# --- Clients directory (external drive fallback) ---
+if [[ -d "/Volumes/Mersey5TB/Work" ]]; then
+  export CLIENTS_DIR="/Volumes/Mersey5TB/Work"
+else
+  export CLIENTS_DIR="$HOME/Documents/Work"
+fi
 
-# --- Autocomplete & Shell Options ---
+# --- OpenJDK PATH (prefer Apple Silicon Homebrew) ---
+if [[ -x "/opt/homebrew/opt/openjdk/bin/java" ]]; then
+  export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+elif [[ -x "/usr/local/opt/openjdk/bin/java" ]]; then
+  export PATH="/usr/local/opt/openjdk/bin:$PATH"
+fi
+
+# --- Completion ---
 autoload -Uz compinit
-# Use a fast rehash only if completion files exist
-if [ -d "$HOME/.zcompdump" ]; then
+if [[ -f "$HOME/.zcompdump" ]]; then
   compinit -C
 else
   compinit
 fi
 
-# Allow aliases to expand during completion
 setopt COMPLETE_ALIASES
+setopt AUTO_CD HIST_IGNORE_DUPS HIST_IGNORE_SPACE INTERACTIVE_COMMENTS
+setopt AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_SILENT
 
-# Improve shell experience
-setopt AUTO_CD          # cd by just typing directory name
-setopt HIST_IGNORE_DUPS # no duplicate commands in history
-setopt HIST_IGNORE_SPACE # ignore commands starting with a space
-setopt INTERACTIVE_COMMENTS # allow comments in the command line
-setopt AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_SILENT # nicer directory navigation
-
-# --- History Settings ---
+# --- History ---
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
 
-# --- Editor Shortcuts ---
+# --- Editor shortcuts ---
 alias vscode='code'
-alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
+command -v cursor >/dev/null 2>&1 || alias cursor="/Applications/Cursor.app/Contents/Resources/app/bin/cursor"
 
-# --- Prompt tweaks ---
+# --- Prompt (optional) ---
 PROMPT='%F{green}%n@%m%f %F{blue}%1~%f %# '
 
-# --- Startup message (optional) ---
-echo "🪴  Zsh core loaded — Booting CLI to..."
-echo "    $CLIENTS_DIR"
+# -- List all custom functions and aliases
+my-functions() {
+  printf "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+  printf "  Your Custom Zsh Commands\n"
+  printf "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+  local desc="" name="" shown_header
+  for file in ~/.zsh_custom/*.zsh; do
+    shown_header=0
+    desc=""
+    while IFS= read -r line; do
+      if [[ "$line" =~ '^# -- (.+)$' ]]; then
+        desc="${match[1]}"
+      elif [[ "$line" =~ '^alias ([^=[:space:]]+)=' ]]; then
+        name="${match[1]}"
+        [[ $shown_header -eq 0 ]] && { printf "\n  %s\n" "$(basename $file)"; shown_header=1; }
+        printf "    %-28s %s\n" "$name" "${desc:-(alias)}"
+        desc=""
+      elif [[ "$line" =~ '^([a-zA-Z_][a-zA-Z0-9_-]*)[[:space:]]*\(\)' ]]; then
+        name="${match[1]}"
+        [[ $shown_header -eq 0 ]] && { printf "\n  %s\n" "$(basename $file)"; shown_header=1; }
+        printf "    %-28s %s\n" "$name" "${desc:-(function)}"
+        desc=""
+      elif [[ -n "$line" && "$line" != \#* ]]; then
+        desc=""
+      fi
+    done < "$file"
+  done
+  printf "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+}
