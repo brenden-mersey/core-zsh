@@ -42,6 +42,12 @@ command -v cursor >/dev/null 2>&1 || alias cursor="/Applications/Cursor.app/Cont
 # --- Prompt (optional) ---
 PROMPT='%F{green}%n@%m%f %F{blue}%1~%f %# '
 
+# --- Fetch current IP address ---
+get-ip() {
+  echo "Fetching current IP address..."
+  curl https://ipinfo.io
+}
+
 # --- Reload the current terminal config ---
 reset-cli() {
   echo "Reloading zsh config..."
