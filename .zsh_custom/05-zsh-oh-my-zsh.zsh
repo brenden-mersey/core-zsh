@@ -25,16 +25,32 @@ ZSH_THEME=""
 source "$ZSH/oh-my-zsh.sh"
 
 # --- Powerlevel10k ---
-# Prefer sourcing from Homebrew if installed; otherwise just skip quietly.
+# Prefer Homebrew if available; otherwise fall back to common macOS install paths.
+P10K_THEME=""
+
 if command -v brew >/dev/null 2>&1; then
   BREW_PREFIX="$(brew --prefix 2>/dev/null)"
   P10K_THEME="$BREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme"
+fi
 
-  if [[ -f "$P10K_THEME" ]]; then
-    source "$P10K_THEME"
-  else
-    # No auto-install on startup (recommended). Uncomment if you *really* want it.
-    # echo "⚠️  Powerlevel10k not found. Install with: brew install powerlevel10k"
-    :
-  fi
+if [[ -z "$P10K_THEME" || ! -f "$P10K_THEME" ]]; then
+  for candidate in \
+    /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme \
+    /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme \
+    /opt/homebrew/Cellar/powerlevel10k/*/share/powerlevel10k/powerlevel10k.zsh-theme \
+    /usr/local/Cellar/powerlevel10k/*/share/powerlevel10k/powerlevel10k.zsh-theme
+  do
+    if [[ -f "$candidate" ]]; then
+      P10K_THEME="$candidate"
+      break
+    fi
+  done
+fi
+
+if [[ -n "$P10K_THEME" && -f "$P10K_THEME" ]]; then
+  source "$P10K_THEME"
+else
+  # Keep startup quiet if Powerlevel10k is not installed.
+  # Your custom ~/.p10k.zsh file will still be loaded by ~/.zshrc when present.
+  :
 fi

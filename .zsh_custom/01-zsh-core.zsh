@@ -42,6 +42,16 @@ command -v cursor >/dev/null 2>&1 || alias cursor="/Applications/Cursor.app/Cont
 # --- Prompt (optional) ---
 PROMPT='%F{green}%n@%m%f %F{blue}%1~%f %# '
 
+# --- Reload the current terminal config ---
+reset-cli() {
+  echo "Reloading zsh config..."
+  source "$HOME/.zshrc"
+}
+
+cli-reset() {
+  reset-cli
+}
+
 # -- List all custom functions and aliases
 my-functions() {
   printf "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"

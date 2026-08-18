@@ -1,3 +1,6 @@
 # Contains a live Harvest API token, never commit the real file.
 # See 06-daymarker-tools.zsh.example for the expected shape.
 .zsh_custom/06-daymarker-tools.zsh
+
+# macOS
+.DS_Store

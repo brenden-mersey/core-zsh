@@ -33,22 +33,6 @@ glog() {
   git log --graph --decorate -n "${1:-10}" --format="%h %s (%an)"
 }
 
-# -- Switch to Aurora Bitbucket identity
-bb-aurora() {
-  git config --global user.name "Brenden Mersey"
-  git config --global user.email "brenden.mersey@auroramj.com"
-  git config --global url."git@bitbucket-aurora:".insteadOf "git@bitbucket.org:"
-  echo "Switched to Aurora (bitbucket-aurora | brenden.mersey@auroramj.com)"
-}
-
-# -- Switch to Daymarker Bitbucket identity
-bb-daymarker() {
-  git config --global user.name "Brenden Mersey"
-  git config --global user.email "brenden@daymarker.digital"
-  git config --global url."git@bitbucket-daymarker:".insteadOf "git@bitbucket.org:"
-  echo "Switched to Daymarker (bitbucket-daymarker | brenden@daymarker.digital)"
-}
-
 # -- Show current Bitbucket identity
 bb-me() {
   echo "--- git identity ---"
@@ -88,23 +72,6 @@ git-latest() {
   fi
 }
 
-# -- Switch to Aurora GitHub account
-gh-aurora() {
-  gh auth switch --user aurora-brenden-mersey
-  git config --global user.name "Brenden Mersey"
-  git config --global user.email "brenden.mersey@auroramj.com"
-  echo "Switched to Aurora (aurora-brenden-mersey | brenden.mersey@auroramj.com)"
-}
-
-# -- Switch to Daymarker GitHub account
-gh-daymarker() {
-  gh auth switch --user brenden-mersey
-  git config --global user.name "Brenden Mersey"
-  git config --global user.email "brenden@daymarker.digital"
-  echo "Switched to Daymarker (brenden-mersey | brenden@daymarker.digital)"
-}
-
-
 # -- Show current GitHub account and identity
 gh-me() {
   echo "--- gh active account ---"
@@ -138,7 +105,7 @@ dirdelta() {
   [[ -d "$dirA" ]] || { echo "Error: '$dirA' is not a directory."; return 1; }
   [[ -d "$dirB" ]] || { echo "Error: '$dirB' is not a directory."; return 1; }
 
-  echo "🌓 Running dirdelta comparison..."
+  echo "Running dirdelta comparison..."
   echo "A (source): $dirA"
   echo "B (target): $dirB"
   echo ""

@@ -18,14 +18,3 @@ cd-work() {
     return 1
   fi
 }
-
-# -- Jump to Aurora Medical Cannabis Inc. project directory
-cd-aurora() {
-  local dir="$CLIENTS_DIR/Aurora Medical Cannabis Inc."
-  if [[ -d "$dir" ]]; then
-    cd "$dir" || return
-  else
-    echo "Aurora directory not found. Is the drive mounted?"
-    return 1
-  fi
-}
